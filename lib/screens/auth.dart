@@ -10,10 +10,18 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  var _isLogin = true;
+  final _form = GlobalKey<FormState>();
 
-  var _submit() {
-    
+  var _isLogin = true;
+  var _enteredEmail = '';
+  var _enteredPassword = '';
+
+  void _submit() {
+    final isValid = _form.currentState!.validate();
+
+    if (isValid) {
+      _form.currentState!.save();
+    }
   }
 
   @override
@@ -41,6 +49,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Form(
+                      key: _form,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -58,6 +67,9 @@ class _AuthScreenState extends State<AuthScreen> {
                               }
                               return null;
                             },
+                            onSaved: (value) {
+                              _enteredEmail = value!;
+                            },
                           ),
                           TextFormField(
                             decoration:
@@ -68,6 +80,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                 return 'Password must be at least 6 characters long.';
                               }
                               return null;
+                            },
+                            onSaved: (value) {
+                              _enteredPassword = value!;
                             },
                           ),
                           const SizedBox(
